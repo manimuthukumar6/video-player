@@ -2,18 +2,16 @@ import React from 'react';
 import videojs from 'video.js'
 
 // TODO - MOVE THIS TO UTILS
-export const getDurationRatio = (currentTime, duration, lastRatio) => {
+export const getDurationRatio = (currentTime, duration) => {
     const percent = ~~((currentTime * 100) / duration);
-    if(percent !== lastRatio) {
-        if (percent === 100) {
-            return 100;
-        }  else if (percent > 75) {
-            return 75;
-        } else if (percent > 50) {
-            return 50;
-        } else if (percent > 25) {
-            return 25;
-        }
+    if (percent === 100) {
+        return 100;
+    }  else if (percent > 75) {
+        return 75;
+    } else if (percent > 50) {
+        return 50;
+    } else if (percent > 25) {
+        return 25;
     }
     return 0;
 };
@@ -21,7 +19,7 @@ export const getDurationRatio = (currentTime, duration, lastRatio) => {
 class VideoPlayer extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { lastLogRatio: 0 }
+        this.state = { durationRatio: 0, showLog: false }
     }
     componentDidMount() {
         // instantiate Video.js
@@ -37,10 +35,13 @@ class VideoPlayer extends React.Component {
             // logger for timeupdate
             this.player.on('timeupdate', () => {
                 // Based on the duration of the video, 25, 50,75 and 100% are calculated and pushed.
-                let ratio = getDurationRatio(this.player.currentTime(), this.player.duration(), this.state.lastLogRatio);
-                if(ratio) {
+                let ratio = getDurationRatio(this.player.currentTime(), this.player.duration(), this.state.durationRatio);
+                if (ratio >= this.state.durationRatio + 25) {
+                    this.setState({ showLog: true })
+                }
+                if(ratio && this.state.showLog) {
                     videojs.log('timeupdate', this.player);
-                    this.setState({ lastLogRatio: ratio })
+                    this.setState({ durationRatio: ratio, showLog: false });
                 }
             });
 
@@ -62,8 +63,8 @@ class VideoPlayer extends React.Component {
         return (
             <div data-vjs-player>
                 <video ref={ node => this.videoNode = node } className="video-js" height="250" width="450" />
-                {this.state.lastLogRatio &&
-                    <p className='msg'> {this.state.lastLogRatio}% Competed  </p>
+                {this.state.durationRatio &&
+                    <p className='msg'> {this.state.durationRatio}% Competed  </p>
                 }
             </div>
         )
