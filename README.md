@@ -28,3 +28,14 @@ The build is minified and the filenames include the hashes.<br>
 Your app is ready to be deployed!
 
 See the section about [deployment](#deployment) for more information.
+
+### To Do's
+
+Here is the prototype spec,
+1. Title : Use a Video.JS player and build a React JS framework to send data every-time video gets viewed till 25%, 50%, 75% and 100%
+2. Details :
+    1. Create a page where i can drag a video from a local directory of any duration : Using React JS
+    2. You can use Video.JS opensource framework for player
+    3. Just optimize the player controls to show seek bar with the following hex code #33B0E8
+    4. On top, We request you to use React JS to build a module to send data to a log file which gets displayed on the page
+    5. Based on the duration of the video, 25, 50,75 and 100% are calculated and pushed.
